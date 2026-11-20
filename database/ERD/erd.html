@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnHire — Entity Relationship Diagram (ERD)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            background: #0B0F19;
+            color: #F8FAFC;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #34D399, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94A3B8;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        .erd-container {
+            background: rgba(22, 30, 46, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.45);
+            border-radius: 1rem;
+            padding: 2rem;
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        .info {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .info-card {
+            background: rgba(22, 30, 46, 0.75);
+            border: 1px solid rgba(51, 65, 85, 0.45);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+        }
+        .info-card h3 {
+            color: #34D399;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .info-card li {
+            padding: 0.3rem 0;
+            color: #94A3B8;
+            font-size: 0.85rem;
+        }
+        .info-card li strong {
+            color: #F8FAFC;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .pk { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
+        .fk { background: rgba(14, 165, 233, 0.2); color: #38BDF8; }
+        .new { background: rgba(16, 185, 129, 0.2); color: #34D399; }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #475569;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ LearnHire — ERD (Versi Sederhana)</h1>
+    <p class="subtitle">Entity Relationship Diagram — MySQL Database Design (6 Tabel)</p>
+
+    <div class="erd-container">
+        <div class="mermaid">
+erDiagram
+    users ||--o{ company_likes : "menyukai"
+    users ||--o{ support_messages : "mengirim"
+
+    companies ||--o{ jobs : "menyediakan"
+    companies ||--o{ company_likes : "disukai"
+
+    job_categories ||--o{ jobs : "mengkategorikan"
+
+    users {
+        int id PK
+        varchar name
+        varchar email UK
+        varchar password
+        varchar phone
+        text address
+        varchar avatar
+        text bio
+        text skills
+        enum role
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    companies {
+        int id PK
+        varchar name
+        varchar logo
+        text description
+        varchar location
+        varchar website
+        varchar industry
+        timestamp created_at
+    }
+
+    job_categories {
+        int id PK
+        varchar name UK
+        varchar icon
+        timestamp created_at
+    }
+
+    jobs {
+        int id PK
+        int company_id FK
+        int category_id FK
+        varchar title
+        text description
+        text requirements
+        decimal salary_min
+        decimal salary_max
+        varchar location
+        enum type
+        enum status
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    company_likes {
+        int id PK
+        int user_id FK
+        int company_id FK
+        timestamp created_at
+    }
+
+    support_messages {
+        int id PK
+        int user_id FK
+        varchar subject
+        text message
+        text reply
+        enum status
+        timestamp created_at
+        timestamp updated_at
+    }
+        </div>
+    </div>
+
+    <div class="info">
+        <div class="info-card">
+            <h3>📋 Ringkasan Database</h3>
+            <ul>
+                <li><strong>Database:</strong> learnhire_db</li>
+                <li><strong>Engine:</strong> InnoDB</li>
+                <li><strong>Charset:</strong> utf8mb4_general_ci</li>
+                <li><strong>Total Tabel:</strong> 6 tabel</li>
+                <li><strong>Target:</strong> MariaDB 10.4.32 / MySQL 8.0+</li>
+                <li><strong>Environment:</strong> XAMPP</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h3>🔑 Primary Keys</h3>
+            <ul>
+                <li><span class="badge pk">PK</span> <strong>users.id</strong> — AUTO_INCREMENT</li>
+                <li><span class="badge pk">PK</span> <strong>companies.id</strong> — AUTO_INCREMENT</li>
+                <li><span class="badge pk">PK</span> <strong>job_categories.id</strong> — AUTO_INCREMENT</li>
+                <li><span class="badge pk">PK</span> <strong>jobs.id</strong> — AUTO_INCREMENT</li>
+                <li><span class="badge pk">PK</span> <strong>company_likes.id</strong> — AUTO_INCREMENT <span class="badge new">BARU</span></li>
+                <li><span class="badge pk">PK</span> <strong>support_messages.id</strong> — AUTO_INCREMENT</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h3>🔗 Foreign Keys & Relationship</h3>
+            <ul>
+                <li><span class="badge fk">FK</span> jobs.company_id → companies.id <strong>(M:1)</strong> — ON DELETE RESTRICT</li>
+                <li><span class="badge fk">FK</span> jobs.category_id → job_categories.id <strong>(M:1)</strong> — ON DELETE SET NULL</li>
+                <li><span class="badge fk">FK</span> company_likes.user_id → users.id <strong>(M:1)</strong> — ON DELETE CASCADE <span class="badge new">BARU</span></li>
+                <li><span class="badge fk">FK</span> company_likes.company_id → companies.id <strong>(M:1)</strong> — ON DELETE CASCADE <span class="badge new">BARU</span></li>
+                <li><span class="badge fk">FK</span> support_messages.user_id → users.id <strong>(M:1)</strong> — ON DELETE CASCADE</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h3>📐 Cardinality</h3>
+            <ul>
+                <li>1 <strong>Company</strong> → ∞ <strong>Jobs</strong> (One-to-Many)</li>
+                <li>1 <strong>Job Category</strong> → ∞ <strong>Jobs</strong> (One-to-Many)</li>
+                <li>1 <strong>User</strong> → ∞ <strong>Company Likes</strong> (One-to-Many)</li>
+                <li>1 <strong>Company</strong> → ∞ <strong>Company Likes</strong> (One-to-Many)</li>
+                <li>1 <strong>User</strong> → ∞ <strong>Support Messages</strong> (One-to-Many)</li>
+                <li><strong>User ↔ Company</strong> — Many-to-Many via <code>company_likes</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        LearnHire — Website Informasi dan Pencarian Lowongan Pekerjaan Sederhana<br>
+        Desain dan Rekayasa Sistem (DRS) B — Departemen Teknik Komputer FTEIC ITS
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10B981',
+                primaryTextColor: '#F8FAFC',
+                primaryBorderColor: '#34D399',
+                lineColor: '#34D399',
+                secondaryColor: '#161E2E',
+                tertiaryColor: '#0B0F19',
+                fontSize: '14px',
+            },
+            er: {
+                diagramPadding: 20,
+                layoutDirection: 'TB',
+                minEntityWidth: 100,
+                minEntityHeight: 75,
+                entityPadding: 15,
+                useMaxWidth: true,
+            }
+        });
+    </script>
+</body>
+</html>
