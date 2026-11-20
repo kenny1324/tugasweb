@@ -1,4 +1,4 @@
-# LearnHire — Database Design (Versi Sederhana)
+# LearnHire — Database Design 
 
 ## Tentang
 
